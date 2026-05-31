@@ -1,4 +1,5 @@
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request, send_from_directory, abort
+import os
 
 app = Flask(__name__)
 
@@ -33,5 +34,30 @@ def calculate_risk():
         "risk_level": risk_level(score)
     })
 
+# Serve static files (HTML/JS/CSS) from the project root so the same service
+# can host the front-end and the API on Render.
+STATIC_DIR = os.path.dirname(os.path.abspath(__file__))
+
+@app.route("/", methods=["GET"])
+def index():
+    return send_from_directory(STATIC_DIR, "index.html")
+
+@app.route("/<path:filename>", methods=["GET"])
+def static_files(filename):
+    # Prevent accidental exposure of Python files or API endpoints
+    if filename.startswith("calculate-risk"):
+        abort(404)
+
+    allowed_ext = (".html", ".js", ".css", ".png", ".jpg", ".jpeg", ".gif", ".svg", ".ico")
+    ext = os.path.splitext(filename)[1].lower()
+    if ext not in allowed_ext:
+        abort(404)
+
+    file_path = os.path.join(STATIC_DIR, filename)
+    if os.path.exists(file_path):
+        return send_from_directory(STATIC_DIR, filename)
+    abort(404)
+
 if __name__ == "__main__":
-    app.run(host="127.0.0.1", port=5000, debug=True)
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host="0.0.0.0", port=port)
