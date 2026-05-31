@@ -137,6 +137,37 @@
             font-weight: bold;
             margin-right: 8px;
         }
+        .risk-action {
+            margin-top: 30px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+        }
+        .risk-action button {
+            background-color: #0066cc;
+            color: white;
+            border: none;
+            padding: 12px 22px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.2s ease;
+        }
+        .risk-action button:hover {
+            background-color: #004a99;
+        }
+        .risk-response {
+            max-width: 700px;
+            width: 100%;
+            padding: 15px 18px;
+            border-radius: 8px;
+            background-color: #eef7ff;
+            border: 1px solid #a7d3ff;
+            color: #264653;
+            text-align: center;
+            font-size: 14px;
+        }
     </style>
 </head>
 <body>
@@ -209,6 +240,10 @@
         </div>
         
         <div class="selected-info" id="selected-info">Click a bowtie section to see details here.</div>
+        <div class="risk-action">
+            <button id="calculate-risk-button" type="button">Calculate Risk</button>
+            <div id="risk-response" class="risk-response">Press the button to calculate a sample risk score using Python.</div>
+        </div>
         
         <!-- Legend -->
         <div class="legend">

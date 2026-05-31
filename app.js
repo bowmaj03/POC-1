@@ -59,6 +59,30 @@ function resetHighlights() {
     }
 }
 
+async function calculateRisk() {
+    const responseBox = document.getElementById('risk-response');
+    if (!responseBox) return;
+
+    responseBox.textContent = 'Calculating risk score...';
+
+    try {
+        const response = await fetch('http://127.0.0.1:5000/calculate-risk');
+        if (!response.ok) {
+            throw new Error(`Server returned ${response.status}`);
+        }
+
+        const data = await response.json();
+        responseBox.innerHTML = `
+            <strong>Risk score:</strong> ${data.risk_score.toFixed(2)}<br>
+            <strong>Likelihood:</strong> ${data.likelihood}<br>
+            <strong>Impact:</strong> ${data.impact}<br>
+            <strong>Level:</strong> ${data.risk_level}
+        `;
+    } catch (error) {
+        responseBox.textContent = `Unable to contact Python service: ${error.message}`;
+    }
+}
+
 document.addEventListener('DOMContentLoaded', () => {
     document.querySelectorAll('.detail-card').forEach(card => {
         const sectionName = card.id.replace('detail-', '');
@@ -71,6 +95,11 @@ document.addEventListener('DOMContentLoaded', () => {
             resetHighlights();
         });
     });
+
+    const calcButton = document.getElementById('calculate-risk-button');
+    if (calcButton) {
+        calcButton.addEventListener('click', calculateRisk);
+    }
 
     resetHighlights();
 });
