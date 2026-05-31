@@ -58,6 +58,16 @@
             justify-content: center;
             margin-bottom: 40px;
         }
+        .selected-info {
+            background-color: #eef7ff;
+            color: #264653;
+            border: 1px solid #a7d3ff;
+            padding: 15px 20px;
+            border-radius: 6px;
+            margin-bottom: 30px;
+            font-size: 15px;
+            text-align: center;
+        }
         svg {
             max-width: 100%;
             height: auto;
@@ -198,6 +208,8 @@
             </svg>
         </div>
         
+        <div class="selected-info" id="selected-info">Click a bowtie section to see details here.</div>
+        
         <!-- Legend -->
         <div class="legend">
             <div class="legend-item">
@@ -281,56 +293,6 @@
         </div>
     </div>
     
-    <script>
-        function highlightSection(section) {
-            // Remove previous highlights
-            document.querySelectorAll('.bowtie-item').forEach(item => {
-                item.style.opacity = '0.7';
-            });
-            
-            // Remove previous card highlights
-            document.querySelectorAll('.detail-card').forEach(card => {
-                card.style.backgroundColor = '#f9f9f9';
-                card.style.borderLeftColor = '#0066cc';
-            });
-            
-            // Highlight selected section
-            const element = document.getElementById(section);
-            if (element) {
-                element.style.opacity = '1';
-                element.style.filter = 'drop-shadow(0 0 12px rgba(0, 102, 204, 0.8))';
-            }
-            
-            // Highlight corresponding detail card
-            const cardId = 'detail-' + section;
-            const card = document.getElementById(cardId);
-            if (card) {
-                card.style.backgroundColor = '#e8f4ff';
-                card.style.borderLeftColor = '#ff6b6b';
-                card.style.fontWeight = 'bold';
-            }
-        }
-        
-        // Add hover effects to detail cards
-        document.querySelectorAll('.detail-card').forEach(card => {
-            const sectionName = card.id.replace('detail-', '');
-            
-            card.addEventListener('mouseenter', function() {
-                highlightSection(sectionName);
-            });
-            
-            card.addEventListener('mouseleave', function() {
-                document.querySelectorAll('.bowtie-item').forEach(item => {
-                    item.style.opacity = '0.7';
-                    item.style.filter = 'none';
-                });
-                document.querySelectorAll('.detail-card').forEach(c => {
-                    c.style.backgroundColor = '#f9f9f9';
-                    c.style.borderLeftColor = '#0066cc';
-                    c.style.fontWeight = 'normal';
-                });
-            });
-        });
-    </script>
+    <script src="app.js"></script>
 </body>
 </html>
