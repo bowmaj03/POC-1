@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Risk</title>
+    <title>Risk Bowtie - Fuel Pump Failure</title>
     <style>
         * {
             margin: 0;
@@ -41,7 +41,7 @@
             background-color: #0066cc;
         }
         .container {
-            max-width: 1200px;
+            max-width: 1400px;
             margin: 40px auto;
             padding: 20px;
             background-color: white;
@@ -53,89 +53,113 @@
             margin-bottom: 30px;
             text-align: center;
         }
-        .bowtie-wrapper {
+        .bowtie-container {
             display: flex;
             justify-content: center;
-            margin-bottom: 40px;
+            gap: 20px;
+            margin: 40px 0;
+            flex-wrap: wrap;
         }
-        .selected-info {
+        .bowtie-section {
+            flex: 1;
+            min-width: 200px;
+            max-width: 280px;
+        }
+        .bowtie-section h3 {
+            text-align: center;
+            font-size: 14px;
+            font-weight: bold;
+            margin-bottom: 12px;
+            text-transform: uppercase;
+        }
+        .causes-section h3 {
+            color: #2d5016;
+        }
+        .preventative-section h3 {
+            color: #333;
+        }
+        .hazard-section h3 {
+            color: #cc6600;
+        }
+        .corrective-section h3 {
+            color: #333;
+        }
+        .consequence-section h3 {
+            color: #8b0000;
+        }
+        .box {
+            padding: 12px;
+            margin: 8px 0;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+            text-align: center;
+            font-size: 13px;
+            font-weight: 500;
+        }
+        .box:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+        .box.selected {
+            border: 2px solid #0066cc;
+            box-shadow: 0 0 12px rgba(0, 102, 204, 0.6);
+        }
+        .causes-box {
+            background-color: #c8e6c9;
+            color: #1b5e20;
+        }
+        .preventative-box {
+            background-color: #e0e0e0;
+            color: #333;
+        }
+        .corrective-box {
+            background-color: #ffe0b2;
+            color: #e65100;
+        }
+        .consequence-box {
+            background-color: #ffcdd2;
+            color: #b71c1c;
+        }
+        .hazard-circle {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 140px;
+            height: 140px;
+            margin: 0 auto;
+            background-color: #ff9800;
+            border-radius: 50%;
+            color: white;
+            font-weight: bold;
+            font-size: 14px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+        .hazard-circle:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        }
+        .hazard-circle.selected {
+            border: 2px solid #0066cc;
+            box-shadow: 0 0 16px rgba(0, 102, 204, 0.8);
+        }
+        .info-box {
             background-color: #eef7ff;
             color: #264653;
             border: 1px solid #a7d3ff;
             padding: 15px 20px;
             border-radius: 6px;
-            margin-bottom: 30px;
-            font-size: 15px;
+            margin: 20px 0;
+            font-size: 14px;
             text-align: center;
-        }
-        svg {
-            max-width: 100%;
-            height: auto;
-        }
-        .bowtie-item {
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-        .bowtie-item:hover rect,
-        .bowtie-item:hover ellipse {
-            filter: drop-shadow(0 0 8px rgba(0, 102, 204, 0.6));
-        }
-        .bowtie-item:hover text {
-            font-weight: bold;
-        }
-        .legend {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
-            margin-top: 30px;
-            padding-top: 20px;
-            border-top: 1px solid #ddd;
-        }
-        .legend-item {
+            min-height: 60px;
             display: flex;
             align-items: center;
-            gap: 10px;
-        }
-        .legend-color {
-            width: 30px;
-            height: 30px;
-            border-radius: 4px;
-            border: 1px solid #999;
-        }
-        .details-section {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
-            margin-top: 30px;
-            padding-top: 30px;
-            border-top: 2px solid #ddd;
-        }
-        .detail-card {
-            background-color: #f9f9f9;
-            padding: 15px;
-            border-radius: 6px;
-            border-left: 4px solid #0066cc;
-        }
-        .detail-card h3 {
-            color: #0066cc;
-            margin-bottom: 10px;
-            font-size: 14px;
-            text-transform: uppercase;
-        }
-        .detail-card ul {
-            list-style: none;
-            padding-left: 0;
-        }
-        .detail-card li {
-            color: #666;
-            padding: 5px 0;
-            font-size: 13px;
-        }
-        .detail-card li:before {
-            content: "• ";
-            color: #0066cc;
-            font-weight: bold;
-            margin-right: 8px;
+            justify-content: center;
         }
         .risk-action {
             margin-top: 30px;
@@ -181,153 +205,109 @@
         </ul>
     </nav>
     <div class="container">
-        <h1>Risk Bowtie Analysis</h1>
-        
-        <div class="bowtie-wrapper">
-            <svg width="1000" height="400" viewBox="0 0 1000 400">
-                <!-- Title text -->
-                <text x="500" y="25" font-size="18" font-weight="bold" text-anchor="middle" fill="#333">Risk Bowtie Model</text>
-                
-                <!-- Left Section: Causes -->
-                <g id="causes" class="bowtie-item" onclick="highlightSection('causes')">
-                    <rect x="20" y="80" width="120" height="240" fill="#FF6B6B" opacity="0.7" rx="5"/>
-                    <text x="80" y="215" font-size="14" font-weight="bold" text-anchor="middle" fill="white">CAUSES</text>
-                    <text x="80" y="235" font-size="11" text-anchor="middle" fill="white">Left Side</text>
-                </g>
-                
-                <!-- Connector 1: Causes to Preventative -->
-                <line x1="140" y1="200" x2="200" y2="180" stroke="#666" stroke-width="2" stroke-dasharray="5,5"/>
-                
-                <!-- Section 2: Preventative Mitigation -->
-                <g id="preventative" class="bowtie-item" onclick="highlightSection('preventative')">
-                    <rect x="200" y="120" width="120" height="160" fill="#4ECDC4" opacity="0.7" rx="5"/>
-                    <text x="260" y="205" font-size="13" font-weight="bold" text-anchor="middle" fill="white">PREVENTATIVE</text>
-                    <text x="260" y="225" font-size="11" text-anchor="middle" fill="white">MITIGATION</text>
-                </g>
-                
-                <!-- Connector 2: Preventative to Hazard -->
-                <line x1="320" y1="200" x2="380" y2="200" stroke="#666" stroke-width="2"/>
-                
-                <!-- Center: Hazard (Circle) -->
-                <g id="hazard" class="bowtie-item" onclick="highlightSection('hazard')">
-                    <circle cx="430" cy="200" r="50" fill="#FFD93D" opacity="0.8"/>
-                    <text x="430" y="205" font-size="14" font-weight="bold" text-anchor="middle" fill="#333">HAZARD</text>
-                </g>
-                
-                <!-- Connector 3: Hazard to Corrective -->
-                <line x1="480" y1="200" x2="540" y2="200" stroke="#666" stroke-width="2"/>
-                
-                <!-- Section 4: Corrective Mitigation -->
-                <g id="corrective" class="bowtie-item" onclick="highlightSection('corrective')">
-                    <rect x="540" y="120" width="120" height="160" fill="#95E1D3" opacity="0.7" rx="5"/>
-                    <text x="600" y="205" font-size="13" font-weight="bold" text-anchor="middle" fill="white">CORRECTIVE</text>
-                    <text x="600" y="225" font-size="11" text-anchor="middle" fill="white">MITIGATION</text>
-                </g>
-                
-                <!-- Connector 4: Corrective to Consequence -->
-                <line x1="660" y1="200" x2="720" y2="180" stroke="#666" stroke-width="2" stroke-dasharray="5,5"/>
-                
-                <!-- Right Section: Consequence -->
-                <g id="consequence" class="bowtie-item" onclick="highlightSection('consequence')">
-                    <rect x="720" y="80" width="120" height="240" fill="#F38181" opacity="0.7" rx="5"/>
-                    <text x="780" y="215" font-size="14" font-weight="bold" text-anchor="middle" fill="white">CONSEQUENCE</text>
-                    <text x="780" y="235" font-size="11" text-anchor="middle" fill="white">Right Side</text>
-                </g>
-                
-                <!-- Top arrow showing the bowtie concept -->
-                <text x="500" y="380" font-size="12" text-anchor="middle" fill="#666">Click any section to view details</text>
-            </svg>
-        </div>
-        
-        <div class="selected-info" id="selected-info">Click a bowtie section to see details here.</div>
-        <div class="risk-action">
-            <button id="calculate-risk-button" type="button">Calculate Risk</button>
-            <div id="risk-response" class="risk-response">Press the button to calculate a sample risk score using Python.</div>
-        </div>
-        
-        <!-- Legend -->
-        <div class="legend">
-            <div class="legend-item">
-                <div class="legend-color" style="background-color: #FF6B6B;"></div>
-                <span><strong>Causes:</strong> Events that initiate the risk pathway</span>
+        <h1>Risk Bowtie Analysis - Fuel Pump Failure</h1>
+
+        <div class="bowtie-container">
+            <!-- Left Side: Causes -->
+            <div class="bowtie-section causes-section">
+                <h3>Potential Causes</h3>
+                <div class="box causes-box" onclick="selectElement(this, 'causes')">Worn Impeller</div>
+                <div class="box causes-box" onclick="selectElement(this, 'causes')">Worn Bearing</div>
+                <div class="box causes-box" onclick="selectElement(this, 'causes')">Cavitation Damage</div>
+                <div class="box causes-box" onclick="selectElement(this, 'causes')">Contaminated Fuel</div>
+                <div class="box causes-box" onclick="selectElement(this, 'causes')">Electrical Failure</div>
             </div>
-            <div class="legend-item">
-                <div class="legend-color" style="background-color: #4ECDC4;"></div>
-                <span><strong>Preventative Mitigation:</strong> Controls to prevent hazard occurrence</span>
-            </div>
-            <div class="legend-item">
-                <div class="legend-color" style="background-color: #FFD93D;"></div>
-                <span><strong>Hazard:</strong> The central risk or critical event</span>
-            </div>
-            <div class="legend-item">
-                <div class="legend-color" style="background-color: #95E1D3;"></div>
-                <span><strong>Corrective Mitigation:</strong> Controls to minimize consequences</span>
-            </div>
-            <div class="legend-item">
-                <div class="legend-color" style="background-color: #F38181;"></div>
-                <span><strong>Consequence:</strong> Potential outcomes if hazard occurs</span>
-            </div>
-        </div>
-        
-        <!-- Details Section -->
-        <div class="details-section">
-            <div class="detail-card" id="detail-causes">
-                <h3>Causes (Root Causes)</h3>
-                <ul>
-                    <li>Equipment failure</li>
-                    <li>Human error</li>
-                    <li>Environmental factors</li>
-                    <li>Process defects</li>
-                    <li>External events</li>
-                </ul>
-            </div>
-            
-            <div class="detail-card" id="detail-preventative">
+
+            <!-- Left-Center: Preventative Mitigations -->
+            <div class="bowtie-section preventative-section">
                 <h3>Preventative Controls</h3>
-                <ul>
-                    <li>Regular maintenance</li>
-                    <li>Training programs</li>
-                    <li>Safety protocols</li>
-                    <li>Monitoring systems</li>
-                    <li>Design safeguards</li>
-                </ul>
+                <div class="box preventative-box" onclick="selectElement(this, 'preventative')">Planned Maintenance Overhaul</div>
+                <div class="box preventative-box" onclick="selectElement(this, 'preventative')">Planned Maintenance Inspection</div>
+                <div class="box preventative-box" onclick="selectElement(this, 'preventative')">Vibration Analysis</div>
+                <div class="box preventative-box" onclick="selectElement(this, 'preventative')">Fuel Filtration</div>
             </div>
-            
-            <div class="detail-card" id="detail-hazard">
-                <h3>Hazard Description</h3>
-                <ul>
-                    <li>Critical event identification</li>
-                    <li>Risk assessment</li>
-                    <li>Probability analysis</li>
-                    <li>Impact evaluation</li>
-                    <li>Controls review</li>
-                </ul>
+
+            <!-- Center: Hazard -->
+            <div class="bowtie-section hazard-section">
+                <h3>Core Event</h3>
+                <div class="hazard-circle" onclick="selectElement(this, 'hazard')">FUEL PUMP FAILURE</div>
             </div>
-            
-            <div class="detail-card" id="detail-corrective">
+
+            <!-- Right-Center: Corrective Mitigations -->
+            <div class="bowtie-section corrective-section">
                 <h3>Corrective Controls</h3>
-                <ul>
-                    <li>Emergency response</li>
-                    <li>Containment measures</li>
-                    <li>Mitigation actions</li>
-                    <li>Recovery procedures</li>
-                    <li>Escalation plans</li>
-                </ul>
+                <div class="box corrective-box" onclick="selectElement(this, 'corrective')">Emergency Shutdown</div>
+                <div class="box corrective-box" onclick="selectElement(this, 'corrective')">Backup Power Supply</div>
+                <div class="box corrective-box" onclick="selectElement(this, 'corrective')">Rapid Diagnosis</div>
+                <div class="box corrective-box" onclick="selectElement(this, 'corrective')">Component Replacement</div>
             </div>
-            
-            <div class="detail-card" id="detail-consequence">
-                <h3>Consequences</h3>
-                <ul>
-                    <li>Personnel injury</li>
-                    <li>Environmental impact</li>
-                    <li>Financial loss</li>
-                    <li>Reputational damage</li>
-                    <li>Regulatory penalties</li>
-                </ul>
+
+            <!-- Right Side: Consequences -->
+            <div class="bowtie-section consequence-section">
+                <h3>Potential Consequences</h3>
+                <div class="box consequence-box" onclick="selectElement(this, 'consequence')">Engine Failure</div>
+                <div class="box consequence-box" onclick="selectElement(this, 'consequence')">Loss of Power</div>
+                <div class="box consequence-box" onclick="selectElement(this, 'consequence')">Vehicle Shutdown</div>
+                <div class="box consequence-box" onclick="selectElement(this, 'consequence')">Safety Risk</div>
+                <div class="box consequence-box" onclick="selectElement(this, 'consequence')">Costly Repairs</div>
             </div>
+        </div>
+
+        <div class="info-box" id="info-box">Click any box or the hazard to see details.</div>
+
+        <div class="risk-action">
+            <button id="calculate-risk-button" type="button">Calculate Risk Score</button>
+            <div id="risk-response" class="risk-response">Press the button to calculate the risk score.</div>
         </div>
     </div>
-    
+
     <script src="app.js"></script>
+    <script>
+        function selectElement(element, category) {
+            // Remove previous selection in this category
+            const category_class = {
+                'causes': 'causes-box',
+                'preventative': 'preventative-box',
+                'corrective': 'corrective-box',
+                'consequence': 'consequence-box',
+                'hazard': 'hazard-circle'
+            }[category];
+
+            document.querySelectorAll('.' + category_class).forEach(el => {
+                el.classList.remove('selected');
+            });
+
+            // Select this element
+            element.classList.add('selected');
+
+            // Update info box
+            const infoBox = document.getElementById('info-box');
+            const text = element.textContent.trim();
+            const messages = {
+                'Worn Impeller': 'Potential cause: Impeller wear reduces pumping efficiency',
+                'Worn Bearing': 'Potential cause: Bearing wear increases friction and can cause pump seizing',
+                'Cavitation Damage': 'Potential cause: Cavitation creates vapor bubbles that damage pump surfaces',
+                'Contaminated Fuel': 'Potential cause: Fuel contamination can clog filters and damage components',
+                'Electrical Failure': 'Potential cause: Electrical issues prevent pump motor operation',
+                'Planned Maintenance Overhaul': 'Preventative control: Complete pump overhaul during scheduled maintenance',
+                'Planned Maintenance Inspection': 'Preventative control: Regular inspection to detect wear before failure',
+                'Vibration Analysis': 'Preventative control: Monitor vibration signatures to detect abnormal wear patterns',
+                'Fuel Filtration': 'Preventative control: High-quality fuel filtration prevents contamination',
+                'Emergency Shutdown': 'Corrective control: Immediate system shutdown when failure detected',
+                'Backup Power Supply': 'Corrective control: Maintains operation during power interruptions',
+                'Rapid Diagnosis': 'Corrective control: Quick identification of failure root cause',
+                'Component Replacement': 'Corrective control: Swift replacement of failed components',
+                'Engine Failure': 'Consequence: Complete engine shutdown due to fuel starvation',
+                'Loss of Power': 'Consequence: System loses operational power',
+                'Vehicle Shutdown': 'Consequence: Vehicle becomes immobilized',
+                'Safety Risk': 'Consequence: Creates hazardous operating conditions',
+                'Costly Repairs': 'Consequence: Expensive replacement and recovery costs',
+                'FUEL PUMP FAILURE': 'Core Event: The central risk - fuel pump stops functioning'
+            };
+
+            infoBox.textContent = messages[text] || 'Element selected';
+        }
+    </script>
 </body>
 </html>
+
