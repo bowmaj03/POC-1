@@ -1,7 +1,30 @@
 from flask import Flask, jsonify, request, send_from_directory, abort
+from flask_sqlalchemy import SQLAlchemy
 import os
 
 app = Flask(__name__)
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///risk_register.db'
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+db = SQLAlchemy(app)
+
+class Risk(db.Model):
+    __tablename__ = 'risk_register'
+    id = db.Column(db.Integer, primary_key=True)
+    risk_name = db.Column(db.String(255), nullable=False, unique=True)
+    created_at = db.Column(db.DateTime, default=db.func.current_timestamp())
+
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'risk_name': self.risk_name,
+            'created_at': self.created_at.isoformat() if self.created_at else None
+        }
+
+with app.app_context():
+    db.create_all()
+    if Risk.query.filter_by(risk_name='Fuel Pump Failure').first() is None:
+        db.session.add(Risk(risk_name='Fuel Pump Failure'))
+        db.session.commit()
 
 def compute_risk(likelihood: float, impact: float) -> float:
     """Return a simple normalized risk score between 0 and 1."""
@@ -34,8 +57,16 @@ def calculate_risk():
         "risk_level": risk_level(score)
     })
 
-# Serve static files (HTML/JS/CSS) from the project root so the same service
-# can host the front-end and the API on Render.
+@app.route("/api/risks", methods=["GET"])
+def get_risks():
+    risks = Risk.query.all()
+    return jsonify([risk.to_dict() for risk in risks])
+
+@app.route("/api/risks/<int:risk_id>", methods=["GET"])
+def get_risk(risk_id):
+    risk = Risk.query.get_or_404(risk_id)
+    return jsonify(risk.to_dict())
+
 STATIC_DIR = os.path.dirname(os.path.abspath(__file__))
 
 @app.route("/", methods=["GET"])
@@ -44,8 +75,7 @@ def index():
 
 @app.route("/<path:filename>", methods=["GET"])
 def static_files(filename):
-    # Prevent accidental exposure of Python files or API endpoints
-    if filename.startswith("calculate-risk"):
+    if filename.startswith("calculate-risk") or filename.startswith("api/"):
         abort(404)
 
     allowed_ext = (".html", ".js", ".css", ".png", ".jpg", ".jpeg", ".gif", ".svg", ".ico")
@@ -61,3 +91,4 @@ def static_files(filename):
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 5000))
     app.run(host="0.0.0.0", port=port)
+
