@@ -66,7 +66,7 @@ async function calculateRisk() {
     responseBox.textContent = 'Calculating risk score...';
 
     try {
-        const response = await fetch('http://127.0.0.1:5000/calculate-risk');
+        const response = await fetch('/calculate-risk');
         if (!response.ok) {
             throw new Error(`Server returned ${response.status}`);
         }
